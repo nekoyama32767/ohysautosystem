@@ -7,6 +7,8 @@
   
  # Requirement
  
+  Install qbittorrent.
+ 
   pip3 install python-qbittorrent
   
  # Usage
@@ -16,3 +18,7 @@
   option
   
   -b addr  remote addr for qbittorrent
+  
+  Add Full titles to animelist.txt,split with line(\n)
+  
+  
