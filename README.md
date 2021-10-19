@@ -18,3 +18,7 @@
   option
   
   -b addr  remote addr for qbittorrent
+  
+  Add Full titles to animelist.txt,split with line(\n)
+  
+  
