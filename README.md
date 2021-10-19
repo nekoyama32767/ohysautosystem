@@ -7,6 +7,8 @@
   
  # Requirement
  
+  Install qbittorrent.
+ 
   pip3 install python-qbittorrent
   
  # Usage
