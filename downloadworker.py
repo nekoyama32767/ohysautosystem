@@ -15,10 +15,9 @@ class DownloadWorker:
 
     def __init__(self,addr=None):
         if addr==None:
-            self.qb=Client("http://127.0.0.1:8080/")
+            self.addr="http://127.0.0.1:8080/"
         else:
-            self.qb=Client("http://"+addr+"/")
-        self.qb.login("admin", "adminadmin")
+            self.addr="http://"+addr+"/"
         self.seq=[]
         self.thread=threading.Thread(target=self.run)
         self.lock=threading.Lock()
@@ -53,6 +52,8 @@ class DownloadWorker:
                             if chunk:
                                 f.write(chunk)
                                 f.flush()
+                    self.qb=Client(self.addr)
+                    self.qb.login("admin", "adminadmin")
                     self.qb.download_from_file(open("./torrent/"+filename,"rb"))
             if (not threading.main_thread().is_alive()):
                 exit()
