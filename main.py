@@ -31,13 +31,16 @@ def nameinfo(origintitlestr):
     metainfostr=infotitlestr[offset+1:len(infotitlestr)-13]
 
     offset=len(titlestr)-2
-
-
+    offsetend=len(titlestr)-1
+    #print(titlestr)
+    if ((titlestr[offset-2:offset+1])=="END"):
+        offset-=4
+        offsetend-=4
     while titlestr[offset].isdigit():
         offset-=1
     title=titlestr[:offset-2]
 
-    chapter=titlestr[offset+1:len(titlestr)-1]
+    chapter=titlestr[offset+1:offsetend]
     metalist=metainfostr.split()
 
     filename=origintitlestr[:-8]
