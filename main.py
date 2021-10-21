@@ -26,23 +26,29 @@ def nameinfo(origintitlestr):
     offset=len(infotitlestr)-1
     while infotitlestr[offset]!='(':
         offset-=1
-
+    offsetend=len(infotitlestr)-1
+    while infotitlestr[offsetend]!=')':
+        offsetend-=1
     titlestr=infotitlestr[:offset]
-    metainfostr=infotitlestr[offset+1:len(infotitlestr)-13]
-
+    metainfostr=infotitlestr[offset+1:offsetend]
+    print(metainfostr)
     offset=len(titlestr)-2
     offsetend=len(titlestr)-1
     #print(titlestr)
     if ((titlestr[offset-2:offset+1])=="END"):
         offset-=4
         offsetend-=4
-    while titlestr[offset].isdigit():
-        offset-=1
-    title=titlestr[:offset-2]
 
-    chapter=titlestr[offset+1:offsetend]
+    if titlestr[offset].isdigit():
+        while titlestr[offset].isdigit():
+            offset-=1
+        title=titlestr[:offset-2]
+
+        chapter=titlestr[offset+1:offsetend]
+    else:
+        chapter="Whole volume"
+        title=titlestr[:offset+1]
     metalist=metainfostr.split()
-
     filename=origintitlestr[:-8]
     info={"title":title,"chapter":chapter,"source":metalist[0],"resolution":metalist[1],"vcode":metalist[2],"acode":metalist[3]}
 
@@ -92,17 +98,17 @@ if __name__  == '__main__':
         for record in jsondata:
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720")):
+            if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume") or True:
                 if local_list.get(info["title"])==None:
                     local_list[info["title"]]={info["chapter"]:info}
-                    dumptofile(local_list)
+                    #dumptofile(local_list)
                     print("main loop working on:",info)
-                    torrentworker.appendwork(info)
+                    #torrentworker.appendwork(info)
                 elif local_list[info["title"]].get(info["chapter"])==None:
                     local_list[info["title"]][info["chapter"]]=info
-                    dumptofile(local_list)
+                    #dumptofile(local_list)
                     print("main loop working on:",info)
-                    torrentworker.appendwork(info)
+                    #torrentworker.appendwork(info)
 
         time.sleep(60)
         #exit()
