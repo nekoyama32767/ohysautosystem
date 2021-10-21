@@ -98,7 +98,7 @@ if __name__  == '__main__':
         for record in jsondata:
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume") or True:
+            if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume"):
                 if local_list.get(info["title"])==None:
                     local_list[info["title"]]={info["chapter"]:info}
                     dumptofile(local_list)
