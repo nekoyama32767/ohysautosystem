@@ -31,7 +31,6 @@ def nameinfo(origintitlestr):
         offsetend-=1
     titlestr=infotitlestr[:offset]
     metainfostr=infotitlestr[offset+1:offsetend]
-    print(metainfostr)
     offset=len(titlestr)-2
     offsetend=len(titlestr)-1
     #print(titlestr)
