@@ -101,14 +101,14 @@ if __name__  == '__main__':
             if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume") or True:
                 if local_list.get(info["title"])==None:
                     local_list[info["title"]]={info["chapter"]:info}
-                    #dumptofile(local_list)
+                    dumptofile(local_list)
                     print("main loop working on:",info)
-                    #torrentworker.appendwork(info)
+                    torrentworker.appendwork(info)
                 elif local_list[info["title"]].get(info["chapter"])==None:
                     local_list[info["title"]][info["chapter"]]=info
-                    #dumptofile(local_list)
+                    dumptofile(local_list)
                     print("main loop working on:",info)
-                    #torrentworker.appendwork(info)
+                    torrentworker.appendwork(info)
 
         time.sleep(60)
         #exit()
