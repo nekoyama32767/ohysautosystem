@@ -8,6 +8,8 @@ import downloadworker
 import json
 import sys
 
+import datetime
+
 def gettitlelistfromfile(filename):
     titlelist=set()
     with open(filename,mode='r') as fin:
@@ -55,10 +57,15 @@ def nameinfo(origintitlestr):
 
 
 
-def dumptofile(local_list):
-    f=open('local.json',"w")
-    json.dump(local_list,f,indent=4)
+def dumptofile(jsondata,filename):
+    f=open(filename,"w")
+    json.dump(jsondata,f,indent=4)
     f.close()
+
+def totitletxt(jsondata,filename):
+    list=sorted([[key,val] for key,val in jsondata.items()],key=lambda now:now[1],reverse=True)
+    with open(filename,mode="w") as f:
+        f.write("\n".join([now[0] for now in list]))
 
 ohysbaseurl="https://ohys.nl/tt/"
 
@@ -88,7 +95,7 @@ if __name__  == '__main__':
     with open('local.json',"r") as f:
          local_list= json.load(f)
     #print(local_list)
-
+    title_list=json.load(open("titles.json",mode="r"))
     while True:
         print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
@@ -97,17 +104,23 @@ if __name__  == '__main__':
         for record in jsondata:
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if ((info["title"]  in  titlelist) and (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume"):
-                if local_list.get(info["title"])==None:
-                    local_list[info["title"]]={info["chapter"]:info}
-                    dumptofile(local_list)
-                    print("main loop working on:",info)
-                    torrentworker.appendwork(info)
-                elif local_list[info["title"]].get(info["chapter"])==None:
-                    local_list[info["title"]][info["chapter"]]=info
-                    dumptofile(local_list)
-                    print("main loop working on:",info)
-                    torrentworker.appendwork(info)
+            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume":
+                if title_list.get(info["title"])==None:
+                    title_list[info["title"]]=str(datetime.date.today())
+                    dumptofile(title_list,"titles.json")
+                    totitletxt(title_list,"titles.txt")
+
+                if (info["title"]  in  titlelist):
+                    if local_list.get(info["title"])==None:
+                        local_list[info["title"]]={info["chapter"]:info}
+                        dumptofile(local_list,"local.json")
+                        print("main loop working on:",info)
+                        torrentworker.appendwork(info)
+                    elif local_list[info["title"]].get(info["chapter"])==None:
+                        local_list[info["title"]][info["chapter"]]=info
+                        dumptofile(local_list,"local.json")
+                        print("main loop working on:",info)
+                        torrentworker.appendwork(info)
 
         time.sleep(60)
         #exit()
