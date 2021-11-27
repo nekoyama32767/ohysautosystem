@@ -41,7 +41,7 @@ def nameinfo(origintitlestr):
         offsetend-=4
 
     if (titlestr[offset].isdigit() or titlestr[offset]=="."):
-        while titlestr[offset].isdigit():
+        while (titlestr[offset].isdigit() or titlestr[offset]=="."):
             offset-=1
         title=titlestr[:offset-2]
 
