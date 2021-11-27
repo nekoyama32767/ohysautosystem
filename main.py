@@ -104,13 +104,13 @@ if __name__  == '__main__':
         for record in jsondata:
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume" and (not("." in info["chapter"])):
+            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume":
                 if title_list.get(info["title"])==None:
                     title_list[info["title"]]=str(datetime.date.today())
                     dumptofile(title_list,"titles.json")
                     totitletxt(title_list,"titles.txt")
 
-                if (info["title"]  in  titlelist):
+                if (info["title"]  in  titlelist)  and (not("." in info["chapter"])):
                     if local_list.get(info["title"])==None:
                         local_list[info["title"]]={info["chapter"]:info}
                         dumptofile(local_list,"local.json")
