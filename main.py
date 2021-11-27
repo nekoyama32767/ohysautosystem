@@ -40,7 +40,7 @@ def nameinfo(origintitlestr):
         offset-=4
         offsetend-=4
 
-    if titlestr[offset].isdigit():
+    if (titlestr[offset].isdigit() or titlestr[offset]=="."):
         while titlestr[offset].isdigit():
             offset-=1
         title=titlestr[:offset-2]
@@ -104,7 +104,7 @@ if __name__  == '__main__':
         for record in jsondata:
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume":
+            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume" and (not("." in info["chapter"])):
                 if title_list.get(info["title"])==None:
                     title_list[info["title"]]=str(datetime.date.today())
                     dumptofile(title_list,"titles.json")
