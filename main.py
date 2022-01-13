@@ -10,6 +10,8 @@ import sys
 
 import datetime
 
+import framework
+
 def gettitlelistfromfile(filename):
     titlelist=set()
     with open(filename,mode='r') as fin:
@@ -96,12 +98,15 @@ if __name__  == '__main__':
          local_list= json.load(f)
     #print(local_list)
     title_list=json.load(open("titles.json",mode="r"))
+    framework.run_multi_flask()
     while True:
         print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
 
         jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
         for record in jsondata:
+            if not ("[Ohys-Raws]" in record["t"]):
+                continue
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
             if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume":

@@ -14,10 +14,14 @@ class DownloadWorker:
     seq=[]
 
     def __init__(self,addr=None):
+
         if addr==None:
-            self.addr="http://127.0.0.1:8080/"
+           # self.qb=Client("http://127.0.0.1:8080/")
+           self.addr="http://127.0.0.1:8080/"
         else:
-            self.addr="http://"+addr+"/"
+            #self.qb=Client("http://"+addr+"/")
+	        self.addr="http://"+addr+"/"
+
         self.seq=[]
         self.thread=threading.Thread(target=self.run)
         self.lock=threading.Lock()
