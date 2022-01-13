@@ -10,6 +10,9 @@
   Install qbittorrent.
  
   pip3 install python-qbittorrent
+
+  Install Flask.
+  pip3 install flask
   
  # Usage
  
