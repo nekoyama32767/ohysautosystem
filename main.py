@@ -102,14 +102,20 @@ if __name__  == '__main__':
     while True:
         print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
-
-        jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+        try:
+            jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+        except:
+            time.sleep(60)
+            continue
         for record in jsondata:
             if not ("[Ohys-Raws]" in record["t"]):
                 continue
             info=nameinfo(record["t"])
             info["url"]=ohysbaseurl+record["a"]
-            if (info["resolution"]=="1280x720") and info["chapter"]!="Whole volume":
+            if not (".torrent" in info["url"]):
+                continue
+
+            if (info["resolution"]=="1280x720" or info["resolution"]=="1280x20") and info["chapter"]!="Whole volume":
                 if title_list.get(info["title"])==None:
                     title_list[info["title"]]=str(datetime.date.today())
                     dumptofile(title_list,"titles.json")

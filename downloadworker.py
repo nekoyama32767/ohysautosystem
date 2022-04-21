@@ -50,7 +50,7 @@ class DownloadWorker:
                 print("torrent working on:",workon["title"])
                 filename=unquote(os.path.basename(workon["url"]))
                 r=requests.get(workon["url"],stream=True)
-                if not os.path.isfile("./torrent/"+filename):
+                while not os.path.isfile("./torrent/"+filename):
                     with open("./torrent/"+filename,'wb') as f:
                         for chunk in r.iter_content(chunk_size=1024):
                             if chunk:
