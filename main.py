@@ -25,6 +25,9 @@ def gettitlelistfromfile(filename):
 
 
 def nameinfo(origintitlestr):
+    v2=False
+    if "mp4.v2.torrent" in origintitlestr:
+        v2=True
     infotitlestr=origintitlestr[12:]
 
     offset=len(infotitlestr)-1
@@ -53,7 +56,7 @@ def nameinfo(origintitlestr):
         title=titlestr[:offset+1]
     metalist=metainfostr.split()
     filename=origintitlestr[:-8]
-    info={"title":title,"chapter":chapter,"source":metalist[0],"resolution":metalist[1],"vcode":metalist[2],"acode":metalist[3]}
+    info={"title":title,"chapter":chapter,"source":metalist[0],"resolution":metalist[1],"vcode":metalist[2],"acode":metalist[3],"v2":v2}
 
     return info
 
@@ -132,7 +135,12 @@ if __name__  == '__main__':
                         dumptofile(local_list,"local.json")
                         print("main loop working on:",info)
                         torrentworker.appendwork(info)
-
+                    elif info["v2"] == True:
+                        if not (local_list[info["title"]].get("v2") == True):
+                            local_list[info["title"]][info["chapter"]]=info
+                            dumptofile(local_list,"local.json")
+                            print("main loop working on:",info)
+                            torrentworker.appendwork(info)
         time.sleep(60)
         #exit()
 #torrentworker.join()
