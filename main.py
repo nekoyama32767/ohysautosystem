@@ -26,7 +26,7 @@ def gettitlelistfromfile(filename):
 
 def nameinfo(origintitlestr):
     v2=False
-    if "mp4.v2.torrent" in origintitlestr:
+    if "mp4 v2.torrent" in origintitlestr:
         v2=True
     infotitlestr=origintitlestr[12:]
 
