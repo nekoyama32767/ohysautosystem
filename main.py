@@ -136,7 +136,7 @@ if __name__  == '__main__':
                         print("main loop working on:",info)
                         torrentworker.appendwork(info)
                     elif info["v2"] == True:
-                        if not (local_list[info["title"]].get("v2") == True):
+                        if not (local_list[info["title"]].get(info["chapter"]).get("v2") == True):
                             local_list[info["title"]][info["chapter"]]=info
                             dumptofile(local_list,"local.json")
                             print("main loop working on:",info)
