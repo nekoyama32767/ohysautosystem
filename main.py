@@ -11,6 +11,7 @@ import sys
 import datetime
 
 import framework
+import datetime
 
 def gettitlelistfromfile(filename):
     titlelist=set()
@@ -103,7 +104,7 @@ if __name__  == '__main__':
     title_list=json.load(open("titles.json",mode="r"))
     framework.run_multi_flask()
     while True:
-        print("check from ohys")
+        #print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
         try:
             jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
@@ -128,18 +129,18 @@ if __name__  == '__main__':
                     if local_list.get(info["title"])==None:
                         local_list[info["title"]]={info["chapter"]:info}
                         dumptofile(local_list,"local.json")
-                        print("main loop working on:",info)
+                        print(datetime.datetime.now(),"main loop working on:",info)
                         torrentworker.appendwork(info)
                     elif local_list[info["title"]].get(info["chapter"])==None:
                         local_list[info["title"]][info["chapter"]]=info
                         dumptofile(local_list,"local.json")
-                        print("main loop working on:",info)
+                        print(datetime.datetime.now(),"main loop working on:",info)
                         torrentworker.appendwork(info)
                     elif info["v2"] == True:
                         if not (local_list[info["title"]].get(info["chapter"]).get("v2") == True):
                             local_list[info["title"]][info["chapter"]]=info
                             dumptofile(local_list,"local.json")
-                            print("main loop working on:",info)
+                            print(datetime.datetime.now(),"main loop working on:",info)
                             torrentworker.appendwork(info)
         time.sleep(60)
         #exit()
