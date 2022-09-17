@@ -50,16 +50,18 @@ class DownloadWorker:
                 print("torrent working on:",workon["title"])
                 filename=unquote(os.path.basename(workon["url"]))
                 r=requests.get(workon["url"],stream=True)
-                while not os.path.isfile("./torrent/"+filename):
-                    with open("./torrent/"+filename,'wb') as f:
-                        pass
                 with open("./torrent/"+filename,'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         if chunk:
                             f.write(chunk)
                             f.flush()
-                    self.qb=Client(self.addr)
-                    self.qb.login("admin", "adminadmin")
-                    self.qb.download_from_file(open("./torrent/"+filename,"rb"))
+                while not os.path.isfile("./torrent/"+filename):
+                    for chunk in r.iter_content(chunk_size=1024):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
+                self.qb=Client(self.addr)
+                self.qb.login("admin", "adminadmin")
+                self.qb.download_from_file(open("./torrent/"+filename,"rb"))
             if (not threading.main_thread().is_alive()):
                 exit()
