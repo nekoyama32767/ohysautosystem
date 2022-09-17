@@ -52,10 +52,12 @@ class DownloadWorker:
                 r=requests.get(workon["url"],stream=True)
                 while not os.path.isfile("./torrent/"+filename):
                     with open("./torrent/"+filename,'wb') as f:
-                        for chunk in r.iter_content(chunk_size=1024):
-                            if chunk:
-                                f.write(chunk)
-                                f.flush()
+                        pass
+                with open("./torrent/"+filename,'wb') as f:
+                    for chunk in r.iter_content(chunk_size=1024):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
                     self.qb=Client(self.addr)
                     self.qb.login("admin", "adminadmin")
                     self.qb.download_from_file(open("./torrent/"+filename,"rb"))
