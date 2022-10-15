@@ -13,6 +13,8 @@ import datetime
 import framework
 import datetime
 
+import nyaa
+
 def gettitlelistfromfile(filename):
     titlelist=set()
     with open(filename,mode='r') as fin:
@@ -80,6 +82,8 @@ ohysquery="dir=disk"
 
 if __name__  == '__main__':
     #print (os.getcwd())
+
+
     if len(sys.argv)==1:
         print("local")
         torrentworker=downloadworker.DownloadWorker("127.0.0.1:8018")
@@ -106,19 +110,22 @@ if __name__  == '__main__':
     while True:
         #print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
+
         try:
-            jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+            #jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+            link_data = nyaa.get_data()
+
         except:
             time.sleep(60)
             continue
-        for record in jsondata:
+        for record in link_data:
             if not ("[Ohys-Raws]" in record["t"]):
                 continue
             info=nameinfo(record["t"])
-            info["url"]=ohysbaseurl+record["a"]
-            if not (".torrent" in info["url"]):
+            info["link"]=record["link"]
+            if not ("magnet" in info["link"]):
                 continue
-
+            
             if (info["resolution"]=="1280x720" or info["resolution"]=="1280x20") and info["chapter"]!="Whole volume":
                 if title_list.get(info["title"])==None:
                     title_list[info["title"]]=str(datetime.date.today())
@@ -143,5 +150,6 @@ if __name__  == '__main__':
                             print(datetime.datetime.now(),"main loop working on:",info)
                             torrentworker.appendwork(info)
         time.sleep(60)
+
         #exit()
 #torrentworker.join()
