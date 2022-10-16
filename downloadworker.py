@@ -64,7 +64,7 @@ class DownloadWorker:
                             f.flush()
                 """
                 self.qb=Client(self.addr)
-                self.qb.login("admin", "2147483647")
+                self.qb.login("admin", "adminadmin")
                 self.qb.download_from_link(workon["link"])
                 #self.qb.download_from_file(open("./torrent/"+filename,"rb"))
             if (not threading.main_thread().is_alive()):
