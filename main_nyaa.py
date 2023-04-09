@@ -4,7 +4,7 @@ import re
 import time
 import os
 
-import downloadworker
+import downloadworker_nyaa
 import json
 import sys
 
@@ -12,6 +12,8 @@ import datetime
 
 import framework
 import datetime
+
+import nyaa
 
 def gettitlelistfromfile(filename):
     titlelist=set()
@@ -80,9 +82,11 @@ ohysquery="dir=disk"
 
 if __name__  == '__main__':
     #print (os.getcwd())
+
+
     if len(sys.argv)==1:
         print("local")
-        torrentworker=downloadworker.DownloadWorker("127.0.0.1:8018")
+        torrentworker=downloadworker_nyaa.DownloadWorker("127.0.0.1:8018")
     else:
         args=sys.argv
         index=1
@@ -91,7 +95,7 @@ if __name__  == '__main__':
                 index+=1
                 if index<len(args):
                     print(args[index])
-                    torrentworker=downloadworker.DownloadWorker(args[index])
+                    torrentworker=downloadworker_nyaa.DownloadWorker(args[index])
                 else:
                     print("Wrong usage")
                     exit()
@@ -106,17 +110,20 @@ if __name__  == '__main__':
     while True:
         #print("check from ohys")
         titlelist=gettitlelistfromfile('animelist.txt')
+
         try:
-            jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+            #jsondata=(getjson.getwebjson(ohysjsonurl,ohysquery+"&p=0"))
+            link_data = nyaa.get_data()
+
         except:
             time.sleep(60)
             continue
-        for record in jsondata:
+        for record in link_data:
             if not ("[Ohys-Raws]" in record["t"]):
                 continue
             info=nameinfo(record["t"])
-            info["url"]=ohysbaseurl+record["a"]
-            if not (".torrent" in info["url"]):
+            info["link"]=record["link"]
+            if not ("magnet" in info["link"]):
                 continue
 
             if (info["resolution"]=="1280x720" or info["resolution"]=="1280x20") and info["chapter"]!="Whole volume":
@@ -143,5 +150,6 @@ if __name__  == '__main__':
                             print(datetime.datetime.now(),"main loop working on:",info)
                             torrentworker.appendwork(info)
         time.sleep(60)
+
         #exit()
 #torrentworker.join()
